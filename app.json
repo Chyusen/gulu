@@ -1,0 +1,54 @@
+{
+  "expo": {
+    "name": "咕噜 Gulu",
+    "slug": "gulu",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#FFF5F0"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.gulu.app",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "用于 Citywalk 陪伴和附近宠物发现",
+        "NSMicrophoneUsageDescription": "用于语音输入与咕噜对话",
+        "NSPhotoLibraryUsageDescription": "用于上传头像和发送图片"
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#FFF5F0"
+      },
+      "package": "com.gulu.app",
+      "permissions": [
+        "ACCESS_FINE_LOCATION",
+        "ACCESS_COARSE_LOCATION",
+        "RECORD_AUDIO"
+      ]
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "允许咕噜使用位置以获得 Citywalk 陪伴体验"
+        }
+      ],
+      "expo-notifications"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "gulu-project"
+      }
+    },
+    "scheme": "gulu"
+  }
+}

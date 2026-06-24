@@ -1,0 +1,215 @@
+// 咕噜 Gulu — Prisma Schema
+// 对应需求文档 九、数据与状态
+// 注意：当前 Demo 使用 Supabase 客户端直接操作，此文件作为类型定义文档与后续 Prisma 迁移参考。
+
+generator client {
+  provider = "prisma-client-py"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(uuid())
+  phone       String?  @unique
+  email       String?  @unique
+  nickname    String   @default("咕噜主人")
+  avatarUrl   String?
+  mbti        String?
+  zodiac      String?
+  gender      String?  // male, female, undisclosed
+  birthDate   DateTime?
+  privacyLevel Int     @default(1)
+  isMinor     Boolean  @default(false)
+  guluCoin    Int      @default(0)
+  starDust    Int      @default(0)
+  createdAt   DateTime @default(now())
+  lastLogin   DateTime?
+  updatedAt   DateTime @updatedAt
+
+  pets        Pet[]
+  dailyTasks  DailyTask[]
+  weeklyTasks WeeklyTask[]
+  taskStreak  TaskStreak?
+  friends     Friend[]      @relation("FriendUser")
+  friendsOf   Friend[]      @relation("FriendTarget")
+  blocked     BlockList[]   @relation("BlockUser")
+  blockedBy   BlockList[]   @relation("BlockTarget")
+  reports     Report[]      @relation("ReportReporter")
+  reportedBy  Report[]      @relation("ReportTarget")
+  currencyLogs CurrencyLog[]
+  explorePrivacy ExplorePrivacy?
+}
+
+model Pet {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name            String   @default("咕噜")
+  personalityType String   @default("dreamer")
+  currentStage    String   @default("baby")
+  stageNumber     Int      @default(1)
+  style           String   @default("anime")
+  imageUrl        String?
+  customDescription String?
+
+  // 三维数值
+  stamina         Int      @default(100)
+  maxStamina      Int      @default(100)
+  intimacy        Int      @default(0)
+  maxIntimacy     Int      @default(300)
+  totalEnergy     Int      @default(0)
+  maxTotalEnergy  Int      @default(500)
+  preferredFoods  String?  // JSON array
+  lastInteractionAt DateTime?
+
+  // 旧版字段
+  energyLevel     Int      @default(80)
+  maxEnergy       Int      @default(100)
+  isGraying       Boolean  @default(false)
+  grayingSeverity Int      @default(0)
+  isDormant       Boolean  @default(false)
+  voiceType       String   @default("cute_child")
+  voiceSpeed      Float    @default(1.0)
+  currentEmotion  String   @default("normal")
+  actionClosureCount Int   @default(0)
+  grayingExperienced Boolean @default(false)
+  grayingHealed   Boolean  @default(false)
+  collectibles    Json     @default("[]")
+  lastInteraction DateTime?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  autoExplores    AutoExplore[]
+  whispers        GuluWhisper[]
+  feedLogs        FeedLogV2[]
+}
+
+model DailyTask {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type            String   // chat, feed, explore, companion, social
+  description     String
+  currentProgress Int      @default(0)
+  targetProgress  Int
+  reward          Int
+  isCompleted     Boolean  @default(false)
+  isClaimed       Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  expiresAt       DateTime
+}
+
+model WeeklyTask {
+  id              String   @id @default(uuid())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type            String   // explore, chat, companion
+  description     String
+  currentProgress Int      @default(0)
+  targetProgress  Int
+  baseReward      Int
+  isCompleted     Boolean  @default(false)
+  isClaimed       Boolean  @default(false)
+  createdAt       DateTime @default(now())
+  expiresAt       DateTime
+}
+
+model TaskStreak {
+  id                String   @id @default(uuid())
+  userId            String   @unique
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  streakDays        Int      @default(0)
+  lastCompleteDate  DateTime?
+  weekDailyAllDone  Json     @default("[]")
+}
+
+model AutoExplore {
+  id                    String   @id @default(uuid())
+  petId                 String
+  pet                   Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+  userId                String
+  startedAt             DateTime @default(now())
+  durationHours         Int
+  estimatedStaminaCost  Int
+  isCompleted           Boolean  @default(false)
+}
+
+model GuluWhisper {
+  id              String   @id @default(uuid())
+  petId           String
+  pet             Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+  story           String
+  personalityTag  String   // social, solo
+  createdAt       DateTime @default(now())
+}
+
+model Friend {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation("FriendUser", fields: [userId], references: [id], onDelete: Cascade)
+  friendId  String
+  friend    User     @relation("FriendTarget", fields: [friendId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, friendId])
+}
+
+model BlockList {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation("BlockUser", fields: [userId], references: [id], onDelete: Cascade)
+  blockedId String
+  blocked   User     @relation("BlockTarget", fields: [blockedId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([userId, blockedId])
+}
+
+model Report {
+  id          String   @id @default(uuid())
+  reporterId  String
+  reporter    User     @relation("ReportReporter", fields: [reporterId], references: [id], onDelete: Cascade)
+  targetId    String
+  target      User     @relation("ReportTarget", fields: [targetId], references: [id], onDelete: Cascade)
+  reason      String   // harassment, ad, inappropriate, other
+  description String?
+  createdAt   DateTime @default(now())
+}
+
+model CurrencyLog {
+  id           String   @id @default(uuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  currencyType String   // gulu_coin, star_dust
+  amount       Int
+  operation    String   // add, spend
+  reason       String
+  createdAt    DateTime @default(now())
+}
+
+model ExplorePrivacy {
+  userId         String   @id
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  showGender     Boolean  @default(false)
+  showMbti       Boolean  @default(false)
+  showZodiac     Boolean  @default(false)
+  firstVisitDone Boolean  @default(false)
+  updatedAt      DateTime @updatedAt
+}
+
+model FeedLogV2 {
+  id             String   @id @default(uuid())
+  petId          String
+  pet            Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+  foodId         String
+  foodQuality    String   // common, fine, rare
+  isPreferred    Boolean  @default(false)
+  staminaGained  Int
+  intimacyGained Int
+  guluCoinSpent  Int      @default(0)
+  createdAt      DateTime @default(now())
+}

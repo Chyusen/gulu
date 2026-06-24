@@ -1,0 +1,90 @@
+# ============================================
+# 咕噜 Gulu — Python 后端依赖 (pip)
+# ============================================
+# 安装: pip install -r requirements.txt --break-system-packages
+
+# === Web 框架 ===
+fastapi==0.111.0
+uvicorn[standard]==0.30.1
+python-multipart==0.0.9
+
+# === 数据库 ===
+supabase==2.5.1
+prisma==0.14.0
+asyncpg==0.29.0
+psycopg2-binary==2.9.9
+
+# === 缓存 ===
+redis==5.0.7
+hiredis==2.3.2
+
+# === AI / LLM ===
+openai==1.35.3          # DeepSeek API 兼容 OpenAI SDK
+httpx==0.27.0           # 异步 HTTP 请求
+
+# === 图像生成 ===
+# SiliconFlow API 使用 httpx 直接调用，无需额外 SDK
+
+# === 认证 ===
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-dotenv==1.0.1
+
+# === 数据处理 ===
+pydantic==2.7.4
+pydantic-settings==2.3.4
+
+# === 工具 ===
+python-dateutil==2.9.0
+pytz==2024.1
+emoji==2.12.1
+
+# === 监控 ===
+sentry-sdk[fastapi]==2.8.0
+
+# === 测试 ===
+pytest==8.2.2
+pytest-asyncio==0.23.7
+httpx==0.27.0            # 测试用 HTTP 客户端
+
+# ============================================
+# 咕噜 Gulu — Node.js 前端依赖 (npm)
+# ============================================
+# 安装: npm install
+# 以下为 package.json 中的 dependencies 和 devDependencies
+
+# --- dependencies ---
+# expo                    # Expo SDK
+# react                   # React 18
+# react-native            # React Native
+# zustand                 # 状态管理
+# @react-navigation/native         # 导航
+# @react-navigation/bottom-tabs    # 底部 Tab 导航
+# @react-navigation/native-stack   # Stack 导航
+# react-native-screens             # 原生屏幕
+# react-native-safe-area-context   # 安全区域
+# react-native-gesture-handler     # 手势处理
+# react-native-reanimated         # 动画
+# expo-av                          # 音频播放
+# lottie-react-native              # Lottie 动画
+# react-native-svg                 # SVG 图标
+# expo-file-system                 # 文件系统（资产缓存）
+# expo-image                       # 优化图片加载
+# expo-device                      # 设备信息
+# expo-notifications               # 推送通知
+# expo-location                    # 定位（Citywalk/社交）
+# @react-native-async-storage/async-storage  # 本地存储
+# react-native-maps                # 地图（高德地图 SDK）
+# axios                            # HTTP 请求
+# @sentry/react-native             # 错误监控
+# date-fns                         # 日期处理
+
+# --- devDependencies ---
+# typescript               # TypeScript
+# @types/react             # React 类型
+# @types/react-native      # React Native 类型
+# jest                     # 测试框架
+# @testing-library/react-native  # RN 测试
+# eslint                   # 代码检查
+# prettier                 # 代码格式化
+# detox                    # E2E 测试
