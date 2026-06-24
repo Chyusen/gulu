@@ -1,0 +1,6 @@
+{
+  "build_command": "npm ci && npx expo export --platform web --output-dir web-build",
+  "output_dir": "web-build",
+  "start_command": "",
+  "cache_dependencies": false
+}
