@@ -39,7 +39,7 @@ interface OnboardingState {
 export const useOnboardingStore = create<OnboardingState>()(
   persist(
     (set) => ({
-      currentStep: 'completed',
+      currentStep: 'welcome',
       mbtiAnswers: [],
       selectedStyle: 'cute' as StyleType,
       customPrompt: '',
@@ -68,9 +68,10 @@ export const useOnboardingStore = create<OnboardingState>()(
       storage: createJSONStorage(() => AsyncStorage),
       onRehydrateStorage: () => (state) => {
         // 部署模式：跳过引导流程，直接进入主界面
-        if (state) {
-          state.currentStep = 'completed';
-        }
+        // 临时注释以截取 onboarding 截图，完成后恢复
+        // if (state) {
+        //   state.currentStep = 'completed';
+        // }
       },
     }
   )

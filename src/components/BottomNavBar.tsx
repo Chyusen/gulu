@@ -68,6 +68,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(99, 115, 255, 0.15)',
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
     borderWidth: 1.5,
     borderColor: 'rgba(99, 115, 255, 0.4)',
   },
@@ -77,9 +78,9 @@ const styles = StyleSheet.create({
     marginTop: 3,
   },
   navIcon: {
-    width: 50,
-    height: 50,
-    resizeMode: 'contain',
+    width: 62,
+    height: 62,
+    resizeMode: 'cover',
   },
   centerBtn: {
     alignItems: 'center',
@@ -93,6 +94,7 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
+    overflow: 'hidden',
     ...({
       shadowColor: theme.colors.primary,
       shadowOffset: { width: 0, height: 0 },
@@ -108,8 +110,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   centerNavIcon: {
-    width: 58,
-    height: 58,
-    resizeMode: 'contain',
+    width: 70,
+    height: 70,
+    resizeMode: 'cover',
   },
 });
