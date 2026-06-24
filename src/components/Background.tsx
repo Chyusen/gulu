@@ -26,7 +26,7 @@ interface GradientSceneConfig {
  * 注意：onboarding（loading）场景保持原有图片背景，不在此配置中
  */
 const GRADIENT_SCENES: Record<string, GradientSceneConfig> = {
-  home: { start: '#2D1B4E', end: '#4A2D7A', texture: 'stars' },
+  // home 默认使用 BACKGROUND_MAP 中的 bg_home_gradient.webp 图片背景
   profile: { start: '#3A2560', end: '#553590', texture: 'halo' },
 };
 

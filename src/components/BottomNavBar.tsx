@@ -62,9 +62,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   sideBtnCircle: {
-    width: 52,
-    height: 52,
-    borderRadius: 26,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     backgroundColor: 'rgba(99, 115, 255, 0.15)',
     alignItems: 'center',
     justifyContent: 'center',
@@ -77,8 +77,8 @@ const styles = StyleSheet.create({
     marginTop: 3,
   },
   navIcon: {
-    width: 34,
-    height: 34,
+    width: 50,
+    height: 50,
     resizeMode: 'contain',
   },
   centerBtn: {
@@ -87,9 +87,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   centerBtnCircle: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 64,
+    height: 64,
+    borderRadius: 32,
     backgroundColor: theme.colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
@@ -108,8 +108,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   centerNavIcon: {
-    width: 38,
-    height: 38,
+    width: 58,
+    height: 58,
     resizeMode: 'contain',
   },
 });
