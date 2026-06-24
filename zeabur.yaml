@@ -1,0 +1,21 @@
+services:
+  frontend:
+    name: gulu-web
+    type: static
+    build:
+      command: npm ci && npx expo export --platform web --output-dir web-build
+      output_dir: web-build
+    environment:
+      NODE_ENV: production
+      EXPO_PUBLIC_API_BASE_URL: https://gulu-api.zeabur.app/api/v1
+
+  backend:
+    name: gulu-api
+    type: docker
+    dockerfile: backend/Dockerfile
+    path: backend
+    ports:
+      - id: web
+        port: 8000
+    environment:
+      PORT: "8000"

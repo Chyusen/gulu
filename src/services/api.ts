@@ -7,9 +7,9 @@ import axios, { AxiosInstance, AxiosError, InternalAxiosRequestConfig } from 'ax
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 /** 后端 API 基础地址 */
-const API_BASE_URL = __DEV__
-  ? 'http://localhost:8000/api/v1'  // 开发环境
-  : 'https://api.gulu.app/api/v1';       // 生产环境
+const API_BASE_URL =
+  process.env.EXPO_PUBLIC_API_BASE_URL ||
+  (__DEV__ ? 'http://localhost:8000/api/v1' : 'https://api.gulu.app/api/v1');
 
 /** Token 存储 key */
 const TOKEN_STORAGE_KEY = '@gulu/auth_token';
