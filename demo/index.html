@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>咕噜 Gulu — 你的灵魂镜像宠物</title>
+  <style>
+    :root {
+      --primary: #8B7CF7;
+      --primary-light: #A9A0FF;
+      --secondary: #FFB6C1;
+      --accent: #FFD166;
+      --bg: #F7F5FF;
+      --card: #FFFFFF;
+      --text: #2D2A45;
+      --text-light: #6B6685;
+      --shadow: 0 10px 40px rgba(139, 124, 247, 0.15);
+      --radius: 24px;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, #8B7CF7 0%, #B8A9FF 50%, #FFD6E5 100%);
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.2) 1px, transparent 1px);
+      background-size: 40px 40px;
+      opacity: 0.5;
+      animation: float 20s linear infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-40px); }
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 1;
+      max-width: 800px;
+    }
+
+    .hero img.logo {
+      width: 120px;
+      height: 120px;
+      border-radius: 32px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      margin-bottom: 30px;
+      object-fit: cover;
+    }
+
+    .hero h1 {
+      font-size: 56px;
+      font-weight: 800;
+      color: white;
+      margin-bottom: 16px;
+      text-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    }
+
+    .hero p {
+      font-size: 22px;
+      color: rgba(255,255,255,0.95);
+      margin-bottom: 36px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .hero-badges {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(10px);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-weight: 600;
+      font-size: 14px;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 80px 20px;
+    }
+
+    .section-title {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+
+    .section-title h2 {
+      font-size: 40px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      background: linear-gradient(135deg, var(--primary), #FF6B9D);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-title p {
+      color: var(--text-light);
+      font-size: 18px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      margin-bottom: 100px;
+    }
+
+    .feature-card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 36px;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 60px rgba(139, 124, 247, 0.2);
+    }
+
+    .feature-card .icon {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 28px;
+    }
+
+    .feature-card h3 {
+      font-size: 22px;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .feature-card p {
+      color: var(--text-light);
+      font-size: 15px;
+      line-height: 1.8;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 24px;
+      margin-bottom: 100px;
+    }
+
+    .gallery-item {
+      background: var(--card);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: transform 0.3s ease;
+    }
+
+    .gallery-item:hover {
+      transform: scale(1.02);
+    }
+
+    .gallery-item img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      background: linear-gradient(135deg, #F0ECFF, #FFE4EC);
+    }
+
+    .gallery-item .caption {
+      padding: 20px;
+    }
+
+    .gallery-item .caption h4 {
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+
+    .gallery-item .caption p {
+      color: var(--text-light);
+      font-size: 14px;
+    }
+
+    .assets-section {
+      background: linear-gradient(135deg, #FFFFFF 0%, #F8F6FF 100%);
+      border-radius: var(--radius);
+      padding: 60px;
+      margin-bottom: 100px;
+      box-shadow: var(--shadow);
+    }
+
+    .asset-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .asset-item {
+      text-align: center;
+      padding: 20px;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .asset-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .asset-item img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      margin-bottom: 12px;
+    }
+
+    .asset-item span {
+      display: block;
+      font-size: 13px;
+      color: var(--text-light);
+    }
+
+    .tech-stack {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .tech-tag {
+      background: white;
+      padding: 14px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      color: var(--text);
+      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      border: 2px solid transparent;
+      transition: border-color 0.3s ease;
+    }
+
+    .tech-tag:hover {
+      border-color: var(--primary-light);
+    }
+
+    .links {
+      text-align: center;
+      padding: 80px 20px;
+      background: linear-gradient(135deg, var(--primary), #A78BFA);
+      border-radius: var(--radius);
+      margin-bottom: 40px;
+    }
+
+    .links h2 {
+      color: white;
+      font-size: 36px;
+      margin-bottom: 20px;
+    }
+
+    .links p {
+      color: rgba(255,255,255,0.9);
+      margin-bottom: 32px;
+      font-size: 18px;
+    }
+
+    .btn {
+      display: inline-block;
+      background: white;
+      color: var(--primary);
+      padding: 16px 36px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 700;
+      font-size: 16px;
+      margin: 8px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    .btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--text-light);
+      padding: 40px 20px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 36px; }
+      .hero p { font-size: 18px; }
+      .section-title h2 { font-size: 28px; }
+      .assets-section { padding: 30px; }
+    }
+  </style>
+</head>
+<body>
+
+  <section class="hero">
+    <div class="hero-content">
+      <img src="../src/assets/images/ui/logo/brand_logo.png" alt="咕噜 Logo" class="logo">
+      <h1>咕噜 Gulu</h1>
+      <p>一款"带游戏功能的疗愈 App"，通过 MBTI 与星座精准画像，为你生成一只真正"懂你"的专属灵魂宠物。</p>
+      <div class="hero-badges">
+        <span class="badge">React Native Web</span>
+        <span class="badge">FastAPI 后端</span>
+        <span class="badge">DeepSeek AI 对话</span>
+        <span class="badge">高德地图 POI</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <section>
+      <div class="section-title">
+        <h2>核心功能</h2>
+        <p>不是又一个聊天机器人，而是你的情绪海绵和灵魂镜子</p>
+      </div>
+      <div class="features">
+        <div class="feature-card">
+          <div class="icon" style="background: linear-gradient(135deg, #FFE4EC, #FFF0F5);">🐾</div>
+          <h3>灵魂宠物生成</h3>
+          <p>MBTI 8题测试 + 星座选择 + AI 形象生成，7种视觉风格实时切换，打造独一无二的咕噜。</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon" style="background: linear-gradient(135deg, #E0E7FF, #F0ECFF);">💬</div>
+          <h3>沉浸式 AI 对话</h3>
+          <p>接入 DeepSeek V4，注入 System Prompt 与最近10轮上下文，支持情感分析与行动闭环。</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon" style="background: linear-gradient(135deg, #FEF3C7, #FFF9E6);">✨</div>
+          <h3>灵魂镜像养成</h3>
+          <p>能量场系统、灰化症预警与治疗、三段式进化，让咕噜真正成长为你的情绪镜像。</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon" style="background: linear-gradient(135deg, #D1FAE5, #ECFDF5);">🗺️</div>
+          <h3>Citywalk 漫步</h3>
+          <p>位置感知 + 高德地图 POI 打卡 + 漫步报告，和咕噜一起探索真实世界。</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon" style="background: linear-gradient(135deg, #FCE7F3, #FDF2F8);">🤝</div>
+          <h3>宠物社交</h3>
+          <p>附近发现、互动玩法、互送礼物，完整隐私过滤与防骚扰机制。</p>
+        </div>
+        <div class="feature-card">
+          <div class="icon" style="background: linear-gradient(135deg, #E0F2FE, #F0F9FF);">🛒</div>
+          <h3>商店与背包</h3>
+          <p>咕噜币与星尘双货币、食物/饰品/皮肤/场景商品、购买后立即装备并在主界面显示。</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>界面预览</h2>
+        <p>从引导流程到主界面的完整体验</p>
+      </div>
+      <div class="gallery">
+        <div class="gallery-item">
+          <img src="../screenshots/01_welcome.png" alt="欢迎页">
+          <div class="caption">
+            <h4>欢迎页</h4>
+            <p>进入咕噜世界的第一步</p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="../screenshots/02_form.png" alt="资料填写">
+          <div class="caption">
+            <h4>资料填写</h4>
+            <p>昵称、MBTI、星座画像</p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="../screenshots/03_constellation.png" alt="星座选择">
+          <div class="caption">
+            <h4>星座选择</h4>
+            <p>12星座图标网格选择</p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="../screenshots/04_style.png" alt="风格选择">
+          <div class="caption">
+            <h4>风格选择</h4>
+            <p>7种视觉风格自由切换</p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="../screenshots/05_naming.png" alt="宠物命名">
+          <div class="caption">
+            <h4>宠物命名</h4>
+            <p>为你的灵魂宠物取名</p>
+          </div>
+        </div>
+        <div class="gallery-item">
+          <img src="../screenshots/06_main_interface.png" alt="主界面">
+          <div class="caption">
+            <h4>主界面</h4>
+            <p>喂食、互动、状态一目了然</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="assets-section">
+      <div class="section-title">
+        <h2>新增 UI 资产</h2>
+        <p>本次迭代生成并接入的精美图标与装饰</p>
+      </div>
+      <div class="asset-grid">
+        <div class="asset-item">
+          <img src="../src/assets/images/ui/food/food_basic_biscuit.png" alt="咕噜小饼干">
+          <span>咕噜小饼干</span>
+        </div>
+        <div class="asset-item">
+          <img src="../src/assets/images/ui/food/food_star_fruit.png" alt="星星果">
+          <span>星星果</span>
+        </div>
+        <div class="asset-item">
+          <img src="../src/assets/images/ui/food/food_rainbow_jelly.png" alt="彩虹果冻">
+          <span>彩虹果冻</span>
+        </div>
+        <div class="asset-item">
+          <img src="../src/assets/images/ui/accessories/wear/accessory_sakura.png" alt="樱花">
+          <span>樱花饰品</span>
+        </div>
+        <div class="asset-item">
+          <img src="../src/assets/images/ui/accessories/wear/accessory_umbrella.png" alt="小伞">
+          <span>小伞饰品</span>
+        </div>
+        <div class="asset-item">
+          <img src="../src/assets/images/ui/accessories/wear/accessory_music_note.png" alt="音符">
+          <span>音符徽章</span>
+        </div>
+        <div class="asset-item">
+          <img src="../src/assets/images/ui/buttons/btn_feed.png" alt="喂食按钮">
+          <span>喂食按钮</span>
+        </div>
+        <div class="asset-item">
+          <img src="../src/assets/images/ui/buttons/btn_friends.png" alt="好友按钮">
+          <span>好友按钮</span>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-title">
+        <h2>技术栈</h2>
+        <p>一套代码覆盖 iOS / Android / Web</p>
+      </div>
+      <div class="tech-stack">
+        <div class="tech-tag">Expo</div>
+        <div class="tech-tag">React Native</div>
+        <div class="tech-tag">TypeScript</div>
+        <div class="tech-tag">Zustand</div>
+        <div class="tech-tag">FastAPI</div>
+        <div class="tech-tag">Supabase</div>
+        <div class="tech-tag">Redis</div>
+        <div class="tech-tag">DeepSeek</div>
+      </div>
+    </section>
+
+    <section class="links">
+      <h2>立即体验</h2>
+      <p>源码已开源，Web 端可一键部署到 Zeabur</p>
+      <a href="https://github.com/Chyusen/gulu.git" class="btn" target="_blank">GitHub 仓库</a>
+      <a href="http://localhost:8081" class="btn">本地开发预览</a>
+    </section>
+  </div>
+
+  <footer class="footer">
+    <p>咕噜 Gulu — 你的灵魂镜像宠物 · MIT License</p>
+  </footer>
+
+</body>
+</html>

@@ -205,7 +205,7 @@ npm install
 cp .env.example .env
 
 # 3. 启动开发服务器
-npx expo start --dev-client
+npx expo start --web
 
 # 4. 类型检查
 npm run type-check
@@ -252,8 +252,29 @@ DEEPSEEK_API_KEY=your_deepseek_key
 SILICONFLOW_API_KEY=your_siliconflow_key
 
 # 高德地图 (Citywalk)
-AMAP_KEY=your_amap_key
+AMAP_API_KEY=your_amap_key
+AMAP_WEB_KEY=your_amap_web_key
 ```
+
+## 在线演示与部署
+
+| 服务 | 地址 | 说明 |
+|------|------|------|
+| GitHub 仓库 | https://github.com/Chyusen/gulu.git | 源码与持续更新 |
+| Web Demo 介绍 | `demo/index.html`（本地打开） | 复用项目资产的交互式 Demo 介绍 |
+| Zeabur 前端 | 部署后生成 | React Native Web 静态构建 |
+| Zeabur 后端 | 部署后生成 | FastAPI 服务 |
+
+部署到 Zeabur 时，需要在服务控制台配置上述所有环境变量（`SUPABASE_*`、`DEEPSEEK_API_KEY`、`AMAP_API_KEY` 等）。
+
+### 已修复的关键问题
+
+- **聊天网络异常**：后端静默 Redis 连接失败，聊天接口可正常返回 AI 回复。
+- **商店购买无反应**：移除 `window.confirm`/`alert`，改用 DOM Toast，购买流程已跑通。
+- **探索推荐卡片无法滑动**：增加左右箭头与 `scrollTo` 控制，推荐卡片可横向切换。
+- **聊天气泡不显示**：Web 端禁用原生动画驱动，气泡正常弹出。
+- **UI 资产统一**：新增主界面背景、食物图标、饰品图标/佩戴图、喂食与好友按钮图标，统一由 `AssetManager` 管理。
+- **属性面板统一**：探索页与首页均使用 `PetStatusBar`，体力、进化阶段与数值保持一致。
 
 ---
 
