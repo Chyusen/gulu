@@ -113,9 +113,10 @@ const styles = StyleSheet.create({
     ...(Platform.OS === 'web' ? { backdropFilter: 'blur(8px)' } : {}),
   },
   btnLabel: {
-    fontSize: 9,
-    color: theme.colors.textSecondary,
+    fontSize: 11,
+    color: theme.colors.textPrimary,
     marginTop: 2,
+    fontWeight: '500',
   },
   expandBtn: {
     width: 46,
