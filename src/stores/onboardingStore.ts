@@ -67,10 +67,7 @@ export const useOnboardingStore = create<OnboardingState>()(
       name: 'gulu-onboarding-storage',
       storage: createJSONStorage(() => AsyncStorage),
       onRehydrateStorage: () => (state) => {
-        // 部署模式：跳过引导流程，直接进入主界面
-        if (state) {
-          state.currentStep = 'completed';
-        }
+        // 保留用户已完成的引导进度，首次使用 default 'welcome'
       },
     }
   )
