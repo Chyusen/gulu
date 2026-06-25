@@ -85,11 +85,7 @@ export function PetCreateStep() {
           <PetAvatar stage="baby" style={activeStyle} state="normal" size={150} animated />
         </View>
 
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.styleScroll}
-        >
+        <View style={styles.styleGrid}>
           {ALL_STYLES.map((style) => {
             const isSelected = activeStyle === style;
             return (
@@ -114,7 +110,7 @@ export function PetCreateStep() {
               ✨ AI 自定义
             </Text>
           </TouchableOpacity>
-        </ScrollView>
+        </View>
 
         {aiMode && (
           <View style={styles.aiInputBox}>
@@ -197,19 +193,22 @@ const styles = StyleSheet.create({
     borderRadius: theme.radius.xl,
     padding: theme.spacing.md,
   },
-  styleScroll: {
+  styleGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'center',
     gap: theme.spacing.xs,
     paddingHorizontal: theme.spacing.md,
     paddingBottom: theme.spacing.sm,
   },
   styleCard: {
-    paddingHorizontal: theme.spacing.sm,
+    paddingHorizontal: theme.spacing.md,
     paddingVertical: theme.spacing.sm,
     backgroundColor: theme.colors.surface,
     borderRadius: theme.radius.md,
     borderWidth: 1.5,
     borderColor: theme.colors.border,
-    minWidth: 58,
+    minWidth: 76,
     alignItems: 'center',
     shadowColor: theme.colors.primary,
     shadowOffset: { width: 0, height: 0 },
