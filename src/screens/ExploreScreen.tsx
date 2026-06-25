@@ -43,6 +43,8 @@ import type { Pet, AutoExploreState } from '../types';
 
 /** 默认坐标：北京南锣鼓巷 */
 const DEFAULT_COORD: [number, number] = [116.394, 39.942];
+/** 探索页推荐卡片本地缓存 key */
+const RECOMMEND_CACHE_KEY = 'gulu-explore-recommendations';
 /** 自主探索时长选项（小时） */
 const DURATION_OPTIONS = [1, 2, 4, 8];
 
@@ -137,6 +139,21 @@ export function ExploreScreen() {
     }
   }, [isFirstVisit]);
 
+  // 从本地缓存恢复推荐卡片，避免重复生成
+  useEffect(() => {
+    if (Platform.OS !== 'web') return;
+    try {
+      const cached = localStorage.getItem(RECOMMEND_CACHE_KEY);
+      if (!cached) return;
+      const parsed = JSON.parse(cached);
+      if (parsed?.recommendations?.length > 0) {
+        setRecommendations(parsed.recommendations);
+      }
+    } catch {
+      // 忽略解析失败
+    }
+  }, []);
+
   // 地图标记：用户位置 + POI + 附近用户
   const mapMarkers = useMemo(() => {
     const markers: Array<{ lng: number; lat: number; title?: string }> = [
@@ -198,21 +215,38 @@ export function ExploreScreen() {
 
     setRecommendLoading(true);
     try {
+      const locationStr = `${centerCoord[0]},${centerCoord[1]}`;
       const result = await recommendationService.recommend(
         user?.id ?? '',
         5,
         user?.mbti,
         user?.zodiac,
+        locationStr,
       );
       if (result.recommendations && result.recommendations.length > 0) {
         setRecommendations(result.recommendations);
+        // 缓存到本地：一次生成后固定显示
+        if (Platform.OS === 'web') {
+          try {
+            localStorage.setItem(
+              RECOMMEND_CACHE_KEY,
+              JSON.stringify({
+                recommendations: result.recommendations,
+                location: result.location,
+                userId: user?.id,
+              })
+            );
+          } catch {
+            // 忽略写入失败
+          }
+        }
       }
     } catch {
       // 获取失败时静默处理，卡片区域显示空状态
     } finally {
       setRecommendLoading(false);
     }
-  }, [user?.id, user?.mbti, user?.zodiac, recommendLoading, showRecommendCards, recommendations.length]);
+  }, [user?.id, user?.mbti, user?.zodiac, recommendLoading, showRecommendCards, recommendations.length, centerCoord]);
 
   const handleBlockOrReport = useCallback((targetNickname: string) => {
     Alert.alert(

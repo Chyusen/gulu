@@ -21,17 +21,19 @@ class RecommendRequest(BaseModel):
     top_k: int = Field(5, ge=1, le=20, description="返回条数")
     mbti: Optional[str] = Field(None, description="MBTI 类型（可选，覆盖数据库值）")
     zodiac: Optional[str] = Field(None, description="星座（可选，覆盖数据库值）")
+    location: Optional[str] = Field(None, description="经度,纬度（可选，传入后生成基于当前位置的攻略）")
 
 
 @router.post("/contents", response_model=ApiResponse)
 async def recommend_contents(data: RecommendRequest) -> ApiResponse:
-    """基于用户画像推荐内容"""
+    """基于用户画像 + 当前位置推荐内容"""
     try:
         result = await _service.recommend_contents(
             user_id=data.user_id,
             top_k=data.top_k,
             mbti=data.mbti,
             zodiac=data.zodiac,
+            location=data.location,
         )
         return ApiResponse.success(data=result)
     except Exception as e:
@@ -45,14 +47,16 @@ async def recommend_contents_get(
     top_k: int = 5,
     mbti: Optional[str] = None,
     zodiac: Optional[str] = None,
+    location: Optional[str] = None,
 ) -> ApiResponse:
-    """基于用户画像推荐内容（GET 方式）"""
+    """基于用户画像 + 当前位置推荐内容（GET 方式）"""
     try:
         result = await _service.recommend_contents(
             user_id=user_id,
             top_k=top_k,
             mbti=mbti,
             zodiac=zodiac,
+            location=location,
         )
         return ApiResponse.success(data=result)
     except Exception as e:

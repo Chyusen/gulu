@@ -184,12 +184,19 @@ export const mapService = {
 
 export const recommendationService = {
   /** 获取推荐内容 */
-  async recommend(userId: string, topK = 5, mbti?: string, zodiac?: string): Promise<RecommendResult> {
+  async recommend(
+    userId: string,
+    topK = 5,
+    mbti?: string,
+    zodiac?: string,
+    location?: string,
+  ): Promise<RecommendResult & { location?: string }> {
     return apiClient.post('/recommendations/contents', {
       user_id: userId,
       top_k: topK,
       mbti,
       zodiac,
+      location,
     });
   },
 

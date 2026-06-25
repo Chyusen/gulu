@@ -85,13 +85,14 @@ class RecommendationService:
         top_k: int = 5,
         mbti: Optional[str] = None,
         zodiac: Optional[str] = None,
+        location: Optional[str] = None,
     ) -> Dict[str, Any]:
         """
-        基于用户画像推荐内容
+        基于用户画像 + 当前位置推荐内容
         1. 获取用户画像（MBTI + 星座）
-        2. 生成画像向量
-        3. 向量相似度检索
-        4. DeepSeek 生成推荐语
+        2. 逆地理编码获取位置名称
+        3. 若提供位置，调用 DeepSeek 生成基于当前位置的攻略卡片
+        4. 否则走原有向量检索 + 推荐语逻辑
         """
         # 获取用户画像
         profile = await self._get_user_profile(user_id, mbti, zodiac)
@@ -103,21 +104,37 @@ class RecommendationService:
         profile_text = self._build_profile_text(profile["mbti"], profile["zodiac"])
         logger.info(f"用户 {user_id} 画像: {profile_text}")
 
-        # 生成画像向量
-        profile_embedding = await self._generate_embedding(profile_text)
+        # 获取位置名称
+        location_name = None
+        if location:
+            try:
+                from app.services.amap_service import AmapService
+                amap = AmapService()
+                regeo_result = await amap.regeo(location)
+                location_name = regeo_result.get("formatted_address", "当前位置")
+            except Exception as e:
+                logger.warning(f"逆地理编码失败: {e}")
+                location_name = "当前位置"
 
-        # 向量检索
-        contents = await self._vector_search(profile_embedding, top_k * 2)
+        # 若提供位置，生成基于当前位置的攻略卡片
+        if location and location_name:
+            recommendations = await self._generate_location_travel_guide(
+                profile, location_name, top_k
+            )
+        else:
+            # 原有逻辑：向量检索 + 推荐语
+            profile_embedding = await self._generate_embedding(profile_text)
+            contents = await self._vector_search(profile_embedding, top_k * 2)
 
-        # 如果向量检索无结果，降级到随机
-        if not contents:
-            contents = await self._get_random_contents(top_k)
+            # 如果向量检索无结果，降级到随机
+            if not contents:
+                contents = await self._get_random_contents(top_k)
 
-        # 截取 top_k
-        contents = contents[:top_k]
+            # 截取 top_k
+            contents = contents[:top_k]
 
-        # DeepSeek 生成推荐语
-        recommendations = await self._generate_reasons(profile, contents)
+            # DeepSeek 生成推荐语
+            recommendations = await self._generate_reasons(profile, contents, location_name)
 
         return {
             "recommendations": recommendations,
@@ -126,6 +143,7 @@ class RecommendationService:
                 "zodiac": profile.get("zodiac"),
                 "description": profile_text,
             },
+            "location": location_name,
         }
 
     async def _get_user_profile(
@@ -242,6 +260,7 @@ class RecommendationService:
         self,
         profile: Dict[str, Any],
         contents: List[Dict[str, Any]],
+        location_name: Optional[str] = None,
     ) -> List[Dict[str, Any]]:
         """使用 DeepSeek 生成推荐语"""
         if not contents:
@@ -265,10 +284,11 @@ class RecommendationService:
                 for i, c in enumerate(contents)
             )
 
+            location_text = f"\n用户当前位置：{location_name}" if location_name else ""
             prompt = (
-                f"用户画像：{profile_text}\n\n"
+                f"用户画像：{profile_text}{location_text}\n\n"
                 f"推荐内容列表：\n{contents_text}\n\n"
-                f"请为每条内容生成一句个性化推荐语（不超过30字），"
+                f"请结合用户当前位置{location_name or '当前位置'}，为每条内容生成一句个性化推荐语（不超过30字），"
                 f"说明为什么适合这个用户。格式：编号. 推荐语"
             )
 
@@ -282,7 +302,7 @@ class RecommendationService:
                 json={
                     "model": settings.DEEPSEEK_MODEL,
                     "messages": [
-                        {"role": "system", "content": "你是一个个性化推荐助手，擅长根据用户画像推荐内容。"},
+                        {"role": "system", "content": "你是一个个性化推荐助手，擅长根据用户画像和当前位置推荐内容。"},
                         {"role": "user", "content": prompt},
                     ],
                     "max_tokens": 800,
@@ -332,6 +352,141 @@ class RecommendationService:
             elif line.strip():
                 reasons.append(line.strip())
         return reasons[:count]
+
+    async def _generate_location_travel_guide(
+        self,
+        profile: Dict[str, Any],
+        location_name: str,
+        top_k: int,
+    ) -> List[Dict[str, Any]]:
+        """基于用户当前位置生成 Citywalk/探店/拍照/美食攻略卡片"""
+        profile_text = self._build_profile_text(profile.get("mbti"), profile.get("zodiac"))
+
+        if not settings.DEEPSEEK_API_KEY:
+            return self._build_fallback_location_recommendations(location_name, top_k, profile_text)
+
+        prompt = (
+            f"你是一位熟悉本地小众玩法的人工智能旅行博主。\n"
+            f"用户画像：{profile_text}\n"
+            f"用户当前位置：{location_name}\n\n"
+            f"请围绕「{location_name}」附近可步行到达的地点，生成 {top_k} 条 Citywalk/探店/拍照/美食/文化景点攻略卡片。\n"
+            f"要求：\n"
+            f"1. 每条攻略必须围绕用户当前位置附近的真实地点，标题需包含城市或区域名；\n"
+            f"2. 标题不超过 16 字，摘要不超过 60 字，给出 2-3 个标签；\n"
+            f"3. 语气轻松、像小红书笔记。\n\n"
+            f"输出格式（严格每行一条）：\n"
+            f"编号. 标题|摘要|标签1,标签2,标签3\n\n"
+            f"只输出攻略内容，不要解释。"
+        )
+
+        try:
+            resp = await request_with_retry(
+                "POST",
+                settings.DEEPSEEK_API_URL,
+                headers={
+                    "Authorization": f"Bearer {settings.DEEPSEEK_API_KEY}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "model": settings.DEEPSEEK_MODEL,
+                    "messages": [
+                        {"role": "system", "content": "你是熟悉本地小众玩法的旅行博主，擅长生成小红书风格的攻略卡片。"},
+                        {"role": "user", "content": prompt},
+                    ],
+                    "max_tokens": 1200,
+                    "temperature": 0.8,
+                    "thinking": {"type": "disabled"},
+                },
+                timeout=40,
+                retries=2,
+            )
+
+            text = ""
+            if resp:
+                data = resp.json()
+                text = data.get("choices", [{}])[0].get("message", {}).get("content", "")
+
+            return self._parse_location_guide(text, location_name, top_k, profile_text)
+        except Exception as e:
+            logger.warning(f"基于位置生成攻略失败: {e}")
+            return self._build_fallback_location_recommendations(location_name, top_k, profile_text)
+
+    def _parse_location_guide(
+        self,
+        text: str,
+        location_name: str,
+        count: int,
+        profile_text: str,
+    ) -> List[Dict[str, Any]]:
+        """解析 DeepSeek 返回的攻略卡片"""
+        recommendations = []
+        for line in text.strip().split("\n"):
+            line = line.strip()
+            if not line:
+                continue
+            # 去掉编号前缀
+            if "." in line:
+                line = line.split(".", 1)[1].strip()
+
+            parts = [p.strip() for p in line.split("|")]
+            if len(parts) >= 3:
+                title, summary, tags_str = parts[0], parts[1], parts[2]
+                tags = [t.strip() for t in tags_str.split(",") if t.strip()]
+            elif len(parts) == 2:
+                title, summary = parts[0], parts[1]
+                tags = ["citywalk", location_name]
+            else:
+                title = line[:16]
+                summary = line
+                tags = ["citywalk", location_name]
+
+            recommendations.append({
+                "content": {
+                    "platform": "xhs",
+                    "external_id": f"loc_guide_{len(recommendations)}",
+                    "title": title,
+                    "summary": summary,
+                    "tags": tags[:3],
+                    "likes": 0,
+                    "location": location_name,
+                    "cover_url": "",
+                },
+                "score": max(0.8, 0.9 - 0.01 * len(recommendations)),
+                "reason": f"基于你{profile_text}的画像，这条攻略正适合你当前所在的{location_name}。",
+            })
+
+            if len(recommendations) >= count:
+                break
+
+        # 若解析不足，用降级内容补齐
+        if len(recommendations) < count:
+            fallback = self._build_fallback_location_recommendations(
+                location_name, count - len(recommendations), profile_text
+            )
+            recommendations.extend(fallback)
+
+        return recommendations[:count]
+
+    def _build_fallback_location_recommendations(
+        self,
+        location_name: str,
+        top_k: int,
+        profile_text: str,
+    ) -> List[Dict[str, Any]]:
+        """降级：给内存内容加上当前位置前缀"""
+        return [
+            {
+                "content": {
+                    **c,
+                    "external_id": f"loc_fallback_{i}",
+                    "title": f"{location_name}｜{c['title']}",
+                    "location": location_name,
+                },
+                "score": 0.85 - 0.01 * i,
+                "reason": f"基于你{profile_text}的画像，这条{location_name}附近的玩法也许适合你。",
+            }
+            for i, c in enumerate(_memory_contents[:top_k])
+        ]
 
     # ========== 基于位置的实时 AI 推荐 ==========
 

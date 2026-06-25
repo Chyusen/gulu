@@ -41,7 +41,7 @@ export const useOnboardingStore = create<OnboardingState>()(
     (set) => ({
       currentStep: 'welcome',
       mbtiAnswers: [],
-      selectedStyle: 'cute' as StyleType,
+      selectedStyle: 'anime' as StyleType,
       customPrompt: '',
       petName: '咕噜',
       setStep: (currentStep) => set({ currentStep }),
