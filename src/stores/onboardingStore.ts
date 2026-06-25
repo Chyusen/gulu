@@ -39,7 +39,7 @@ interface OnboardingState {
 export const useOnboardingStore = create<OnboardingState>()(
   persist(
     (set) => ({
-      currentStep: 'completed',
+      currentStep: 'welcome',
       mbtiAnswers: [],
       selectedStyle: 'cute' as StyleType,
       customPrompt: '',
