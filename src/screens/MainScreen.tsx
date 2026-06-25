@@ -997,9 +997,9 @@ const styles = StyleSheet.create({
     fontSize: 26,
   },
   sideMenuIcon: {
-    width: 58,
-    height: 58,
-    resizeMode: 'cover',
+    width: 28,
+    height: 28,
+    resizeMode: 'contain',
   },
   evolutionButton: {
     position: 'absolute',

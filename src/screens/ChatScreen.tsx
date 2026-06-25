@@ -333,9 +333,9 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
   },
   bubble: {
-    maxWidth: '80%',
+    maxWidth: '75%',
     borderRadius: theme.radius.lg,
-    padding: theme.spacing.md,
+    padding: theme.spacing.sm,
   },
   userBubble: {
     backgroundColor: theme.colors.primary,
@@ -347,7 +347,7 @@ const styles = StyleSheet.create({
   },
   messageText: {
     fontSize: theme.fontSize.body,
-    lineHeight: 22,
+    lineHeight: 20,
   },
   userText: {
     color: theme.colors.textInverse,
@@ -365,7 +365,7 @@ const styles = StyleSheet.create({
     marginTop: theme.spacing.sm,
     backgroundColor: theme.colors.backgroundSecondary,
     borderRadius: theme.radius.md,
-    padding: theme.spacing.md,
+    padding: theme.spacing.sm,
   },
   actionLabel: {
     fontSize: theme.fontSize.caption,

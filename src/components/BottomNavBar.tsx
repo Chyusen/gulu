@@ -20,7 +20,7 @@ export function BottomNavBar({ onChat, onExplore, onProfile }: BottomNavBarProps
       {/* 探索（左） */}
       <TouchableOpacity style={styles.sideBtn} onPress={onExplore} activeOpacity={0.7}>
         <View style={styles.sideBtnCircle}>
-          <Image source={require('../assets/images/ui/icons/nav/explore_nav.png')} style={styles.navIcon} resizeMode="contain" />
+          <Image source={require('../assets/images/ui/icons/nav/explore_nav.png')} style={styles.navIcon} />
         </View>
         <Text style={styles.sideBtnLabel}>探索</Text>
       </TouchableOpacity>
@@ -28,7 +28,7 @@ export function BottomNavBar({ onChat, onExplore, onProfile }: BottomNavBarProps
       {/* 对话（正中间） */}
       <TouchableOpacity style={styles.centerBtn} onPress={onChat} activeOpacity={0.7}>
         <View style={styles.centerBtnCircle}>
-          <Image source={require('../assets/images/ui/icons/nav/chat_nav.png')} style={styles.centerNavIcon} resizeMode="contain" />
+          <Image source={require('../assets/images/ui/icons/nav/chat_nav.png')} style={styles.centerNavIcon} />
         </View>
         <Text style={styles.centerBtnLabel}>对话</Text>
       </TouchableOpacity>
@@ -36,7 +36,7 @@ export function BottomNavBar({ onChat, onExplore, onProfile }: BottomNavBarProps
       {/* 个人中心（右） */}
       <TouchableOpacity style={styles.sideBtn} onPress={onProfile} activeOpacity={0.7}>
         <View style={styles.sideBtnCircle}>
-          <Image source={require('../assets/images/ui/icons/nav/profile_nav.png')} style={styles.navIcon} resizeMode="contain" />
+          <Image source={require('../assets/images/ui/icons/nav/profile_nav.png')} style={styles.navIcon} />
         </View>
         <Text style={styles.sideBtnLabel}>我的</Text>
       </TouchableOpacity>
@@ -62,9 +62,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   sideBtnCircle: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
+    width: 52,
+    height: 52,
+    borderRadius: 26,
     backgroundColor: 'rgba(99, 115, 255, 0.15)',
     alignItems: 'center',
     justifyContent: 'center',
@@ -73,14 +73,14 @@ const styles = StyleSheet.create({
     borderColor: 'rgba(99, 115, 255, 0.4)',
   },
   sideBtnLabel: {
-    fontSize: 11,
+    fontSize: 10,
     color: '#B0B5BD',
-    marginTop: 3,
+    marginTop: 4,
   },
   navIcon: {
-    width: 62,
-    height: 62,
-    resizeMode: 'cover',
+    width: 28,
+    height: 28,
+    resizeMode: 'contain',
   },
   centerBtn: {
     alignItems: 'center',
@@ -88,9 +88,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   centerBtnCircle: {
-    width: 64,
-    height: 64,
-    borderRadius: 32,
+    width: 56,
+    height: 56,
+    borderRadius: 28,
     backgroundColor: theme.colors.primary,
     alignItems: 'center',
     justifyContent: 'center',
@@ -104,14 +104,14 @@ const styles = StyleSheet.create({
     } as object),
   },
   centerBtnLabel: {
-    fontSize: 11,
+    fontSize: 10,
     color: theme.colors.primaryLight,
-    marginTop: 3,
+    marginTop: 4,
     fontWeight: '600',
   },
   centerNavIcon: {
-    width: 70,
-    height: 70,
-    resizeMode: 'cover',
+    width: 30,
+    height: 30,
+    resizeMode: 'contain',
   },
 });

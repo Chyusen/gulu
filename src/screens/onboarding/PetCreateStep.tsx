@@ -82,7 +82,7 @@ export function PetCreateStep() {
         </View>
 
         <View style={styles.previewContainer}>
-          <PetAvatar stage="baby" style={activeStyle} state="normal" size={180} animated />
+          <PetAvatar stage="baby" style={activeStyle} state="normal" size={150} animated />
         </View>
 
         <ScrollView
@@ -159,56 +159,57 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.background,
   },
   scrollContent: {
-    padding: theme.spacing.lg,
-    paddingVertical: theme.spacing.xl,
+    padding: theme.spacing.md,
+    paddingVertical: theme.spacing.lg,
     alignItems: 'center',
   },
   title: {
-    fontSize: theme.fontSize.largeTitle,
+    fontSize: theme.fontSize.headline,
     fontWeight: '700',
     color: theme.colors.textPrimary,
     textAlign: 'center',
-    marginBottom: theme.spacing.xl,
+    marginBottom: theme.spacing.lg,
   },
   reminderBox: {
     width: '100%',
     backgroundColor: theme.colors.surface,
     borderRadius: theme.radius.lg,
-    padding: theme.spacing.lg,
-    marginBottom: theme.spacing.lg,
+    padding: theme.spacing.md,
+    marginBottom: theme.spacing.md,
     flexDirection: 'row',
     alignItems: 'flex-start',
-    gap: theme.spacing.md,
+    gap: theme.spacing.sm,
   },
   reminderEmoji: {
-    fontSize: 20,
+    fontSize: 18,
   },
   reminderText: {
     flex: 1,
-    fontSize: theme.fontSize.body,
+    fontSize: theme.fontSize.caption,
     color: theme.colors.textSecondary,
-    lineHeight: 22,
+    lineHeight: 20,
   },
   previewContainer: {
     width: '100%',
     alignItems: 'center',
-    marginBottom: theme.spacing.xl,
+    marginBottom: theme.spacing.lg,
     backgroundColor: theme.colors.surface,
     borderRadius: theme.radius.xl,
-    padding: theme.spacing.lg,
+    padding: theme.spacing.md,
   },
   styleScroll: {
-    gap: theme.spacing.sm,
-    paddingBottom: theme.spacing.md,
+    gap: theme.spacing.xs,
+    paddingHorizontal: theme.spacing.md,
+    paddingBottom: theme.spacing.sm,
   },
   styleCard: {
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.md,
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
     backgroundColor: theme.colors.surface,
     borderRadius: theme.radius.md,
     borderWidth: 1.5,
     borderColor: theme.colors.border,
-    minWidth: 80,
+    minWidth: 64,
     alignItems: 'center',
     shadowColor: theme.colors.primary,
     shadowOffset: { width: 0, height: 0 },
@@ -223,7 +224,7 @@ const styles = StyleSheet.create({
     elevation: 8,
   },
   styleCardText: {
-    fontSize: theme.fontSize.body,
+    fontSize: theme.fontSize.caption,
     color: theme.colors.textPrimary,
   },
   styleCardTextSelected: {
@@ -243,8 +244,8 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: theme.colors.surface,
     borderRadius: theme.radius.lg,
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.md,
+    paddingHorizontal: theme.spacing.md,
+    paddingVertical: theme.spacing.sm,
     fontSize: theme.fontSize.body,
     color: theme.colors.textPrimary,
     borderWidth: 1.5,
@@ -253,7 +254,7 @@ const styles = StyleSheet.create({
   aiConfirm: {
     backgroundColor: theme.colors.primary,
     borderRadius: theme.radius.lg,
-    paddingHorizontal: theme.spacing.lg,
+    paddingHorizontal: theme.spacing.md,
     justifyContent: 'center',
   },
   aiConfirmText: {
@@ -262,12 +263,12 @@ const styles = StyleSheet.create({
   },
   aiFeedback: {
     marginTop: theme.spacing.md,
-    fontSize: theme.fontSize.body,
+    fontSize: theme.fontSize.caption,
     color: theme.colors.textSecondary,
     textAlign: 'center',
   },
   continueText: {
-    marginTop: theme.spacing.xl,
+    marginTop: theme.spacing.lg,
     fontSize: theme.fontSize.subtitle,
     color: theme.colors.primary,
     fontWeight: '600',
