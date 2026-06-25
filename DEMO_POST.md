@@ -15,9 +15,9 @@
 - **探索世界**：基于高德地图的 LBS 探索，点击「推荐」即可展开 AI 个性化攻略卡片，找到附近适合你的 Citywalk、咖啡馆、日落机位。
 - **情绪疗愈**：和咕噜对话、完成每日任务，帮助它从「灰化」状态恢复，也帮助自己整理情绪。
 
-> 体验地址：**[Zeabur 部署完成后的前端域名，占位符]**
+> 体验地址：**https://gulu-web.preview.aliyun-zeabur.cn**
 >
-> 后端 API：**[Zeabur 部署完成后的后端域名，占位符]**
+> 后端 API：**https://gulu-api.preview.aliyun-zeabur.cn/api/v1**
 
 ---
 
@@ -164,5 +164,5 @@ Zustand + persist 让 onboarding 进度被存到 localStorage，导致刷新后�
 **标签**：生活娱乐  
 **作品名**：咕噜 Gulu  
 **作者**：[你的昵称]  
-**体验地址**：[占位符]  
+**体验地址**：https://gulu-web.preview.aliyun-zeabur.cn  
 **开源仓库**：https://github.com/Chyusen/gulu.git
